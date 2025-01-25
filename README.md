@@ -44,7 +44,7 @@ O projeto foi desenvolvido utilizando a arquitetura MVC, com os seguintes compon
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/calculadora-mvc.git
+   git clone https://github.com/RaphaelNNS/CalculadoraMVC.git
    ```
 
 2. Abra o projeto no Android Studio.
