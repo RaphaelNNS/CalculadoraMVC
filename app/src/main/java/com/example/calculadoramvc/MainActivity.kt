@@ -1,18 +1,22 @@
 package com.example.calculadoramvc
 
 import android.os.Bundle
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.example.calculadoramvc.controller.MainCalcController
 import com.example.calculadoramvc.databinding.ActivityMainBinding
+import com.example.calculadoramvc.model.Calculadora
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
 
-    private lateinit var controller: MainCalcController
     private lateinit var binding: ActivityMainBinding
-
+    private lateinit var visor: TextView
+    private lateinit var controller: MainCalcController
+    private lateinit var calculadora: Calculadora
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,12 +30,10 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
-
-
-        controller = MainCalcController(this)
+        calculadora = Calculadora()
+        controller = MainCalcController(calculadora, this)
         setupButtonListeners()
-        controller.showError("Erro ao analisar a expressão")
-
+        visor = binding.tvResult
     }
 
     private fun setupButtonListeners() {
@@ -55,16 +57,30 @@ class MainActivity : AppCompatActivity() {
 
         buttons.forEach { button ->
             button.setOnClickListener {
-                controller.addTermToVisor(button.text.toString())
+                controller.addTerm(button.text.toString())
             }
         }
-
         binding.btnBackspace.setOnClickListener{
-            controller.removeTermFromVisor()
+            controller.removeTerm()
         }
         binding.btnEqual.setOnClickListener{
             controller.calculate()
         }
+    }
+
+    fun showError(s: String) {
+        var alert = AlertDialog.Builder(this)
+        alert.setTitle("ERRO")
+        alert.setMessage("Voce esta tentando efetuar uma operação não permitida.\n$s")
+        alert.setNeutralButton("Voltar"){_,_ ->
+
+        }
+        alert.create().show()
+    }
+
+
+    fun updateVisor(expression: String) {
+        visor.text = expression
     }
 
 }

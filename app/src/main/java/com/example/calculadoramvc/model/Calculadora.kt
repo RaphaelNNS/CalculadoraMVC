@@ -25,7 +25,8 @@ class Calculadora {
         }
         try{
             var result = Expression(expression).evaluate().value
-            return result.toString()
+            expression = result.toString()
+            return expression
         }catch (e: ParseException){
             throw e
         }catch (e: EvaluationException){

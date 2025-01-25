@@ -1,62 +1,39 @@
 package com.example.calculadoramvc.controller
 
-import android.widget.TextView
-import androidx.appcompat.app.AlertDialog
 import androidx.core.net.ParseException
 import com.example.calculadoramvc.MainActivity
-import com.example.calculadoramvc.R
 import com.example.calculadoramvc.model.Calculadora
 import com.ezylang.evalex.EvaluationException
 
 class MainCalcController(
+    private var calculadora: Calculadora,
     private var mainActivity: MainActivity
-) {
+){
 
-    val visor = mainActivity.findViewById<TextView>(R.id.tvResult)
-    val calculadora = Calculadora()
-
-
-    fun addTermToVisor(term: String){
+    fun addTerm(term: String){
         calculadora.addToExpression(term)
-        updateVisor()
+        mainActivity.updateVisor(calculadora.expression)
     }
 
-    fun removeTermFromVisor(){
+    fun removeTerm(){
         calculadora.removeFromExpression()
-        updateVisor()
-    }
-
-    fun showError(s: String) {
-        var alert = AlertDialog.Builder(mainActivity)
-        alert.setTitle("ERRO")
-        alert.setMessage("Voce esta tentando efetuar uma operação não permitida.\n$s")
-        alert.setNeutralButton("Voltar"){_,_ ->
-
-        }
-        alert.create().show()
-    }
-
-    fun updateVisor() {
-        visor.text = calculadora.expression
+        mainActivity.updateVisor(calculadora.expression)
     }
 
     fun calculate() {
         try {
             var result = calculadora.evaluate()
-            visor.text = result
+            mainActivity.updateVisor(calculadora.expression)
         }catch (e: ParseException){
-            showError("Erro ao analisar a expressão")
+            mainActivity.showError("Erro ao analisar a expressão")
         }
         catch (e: EvaluationException){
-            showError("Erro calcular a expressão")
+            mainActivity.showError("Erro calcular a expressão")
         }catch (e: IllegalArgumentException){
-            showError("A expressão esta vazia")
+            mainActivity.showError("A expressão esta vazia")
         }catch (e: Exception){
-            showError("")
+            mainActivity.showError("")
         }
-
     }
-
-
 }
 
